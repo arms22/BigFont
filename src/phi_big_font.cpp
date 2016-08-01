@@ -22,8 +22,24 @@
   Revision: 08/01/2016
 */
 #include <stdio.h>
-#include <avr/pgmspace.h>
 #include "phi_big_font.h"
+
+#if defined(ARDUINO_ARCH_AVR)
+  #include <avr/pgmspace.h>
+#else
+  #ifndef PROGMEM
+    #define PROGMEM
+  #endif
+  #ifndef pgm_read_byte
+    #define pgm_read_byte(p) (*(p))
+  #endif
+  #ifndef pgm_read_word
+    #define pgm_read_word(p) (*(p))
+  #endif
+  #ifndef strcpy_P
+  	#define strcpy_P strcpy
+  #endif
+#endif
 
 static const char pbf_lcd_ch0[]	PROGMEM = {64,64,64,64,64,64,64,64,0};	//0
 static const char pbf_lcd_ch1[]	PROGMEM = {64,64,64,64,64,31,31,31,0};	//1
