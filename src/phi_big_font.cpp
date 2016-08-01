@@ -17,22 +17,24 @@
   
   Updates:
   The array names for programmable characters on the LCD has been changed to aviod conflict with other libraries. 
+
+  modified by arms22.
+  Revision: 08/01/2016
 */
 #include <stdio.h>
 #include <avr/pgmspace.h>
-#include <LiquidCrystal.h>
 #include "phi_big_font.h"
 
-static PROGMEM prog_char pbf_lcd_ch0[]	= {64,64,64,64,64,64,64,64,0};	//0
-static PROGMEM prog_char pbf_lcd_ch1[]	= {64,64,64,64,64,31,31,31,0};	//1
-static PROGMEM prog_char pbf_lcd_ch2[]	= {64,64,64,31,31,64,64,64,0};	//2
-static PROGMEM prog_char pbf_lcd_ch3[]	= {64,64,64,31,31,31,31,31,0};	//3
-static PROGMEM prog_char pbf_lcd_ch4[]	= {31,31,31,64,64,64,64,64,0};	//4
-static PROGMEM prog_char pbf_lcd_ch5[]	= {31,31,31,64,64,31,31,31,0};	//5
-static PROGMEM prog_char pbf_lcd_ch6[]	= {31,31,31,31,31,64,64,0};		//6
-static PROGMEM prog_char pbf_lcd_ch7[]	= {31,31,31,31,31,31,31,31,0};	//7
+static const char pbf_lcd_ch0[]	PROGMEM = {64,64,64,64,64,64,64,64,0};	//0
+static const char pbf_lcd_ch1[]	PROGMEM = {64,64,64,64,64,31,31,31,0};	//1
+static const char pbf_lcd_ch2[]	PROGMEM = {64,64,64,31,31,64,64,64,0};	//2
+static const char pbf_lcd_ch3[]	PROGMEM = {64,64,64,31,31,31,31,31,0};	//3
+static const char pbf_lcd_ch4[]	PROGMEM = {31,31,31,64,64,64,64,64,0};	//4
+static const char pbf_lcd_ch5[]	PROGMEM = {31,31,31,64,64,31,31,31,0};	//5
+static const char pbf_lcd_ch6[]	PROGMEM = {31,31,31,31,31,64,64,0};		//6
+static const char pbf_lcd_ch7[]	PROGMEM = {31,31,31,31,31,31,31,31,0};	//7
 
-static PROGMEM const char *pbf_ch_item[] = {
+static const char * const pbf_ch_item[] PROGMEM = {
 	pbf_lcd_ch0,
 	pbf_lcd_ch1,
 	pbf_lcd_ch2,
@@ -43,13 +45,13 @@ static PROGMEM const char *pbf_ch_item[] = {
 	pbf_lcd_ch7
 };
 
-static PROGMEM prog_char font_35_09[] = {
+static const char font_35_09[] PROGMEM = {
 	1,2,3,7,1,6, 1,3,0,1,7,1, 2,2,3,7,5,5, 2,2,3,5,5,7,
 	3,0,3,4,4,7, 3,2,2,5,5,7, 3,2,2,7,5,7, 2,2,3,0,0,7,
 	3,2,3,7,5,7, 3,2,3,5,5,7
 };
 
-static PROGMEM prog_char font_35_dot[] = {
+static const char font_35_dot[] = {
     0,0,0,0,3,0, // '.'
 };
 
@@ -71,7 +73,7 @@ _ 0,0,0,1,1,1,
 < 0,1,2,4,2,1,
 ? 2,2,3,0,5,0,
 */
-static PROGMEM prog_char font_35_AZ[] = {
+static const char font_35_AZ[] PROGMEM = {
 	3,2,3,7,4,7, 3,2,3,7,5,3, 3,2,2,7,1,1, 3,2,1,7,1,6,
 	3,2,2,7,5,5, 3,2,2,7,4,4, 3,2,2,7,1,7, 3,0,3,7,4,7,
 	2,3,2,1,7,1, 2,2,3,3,1,7, 3,0,1,7,4,3, 3,0,0,7,1,1,
@@ -81,7 +83,7 @@ static PROGMEM prog_char font_35_AZ[] = {
 	3,0,3,4,7,4, 2,2,3,3,5,1
 };
 
-static PROGMEM prog_char font_35_az[] = {
+static const char font_35_az[] PROGMEM = {
 	2,2,1,2,5,7, 3,1,0,7,1,6, 1,2,2,6,1,1, 0,1,3,6,1,7,
 	1,2,1,6,5,5, 0,1,2,4,7,4, 1,2,1,1,5,6, 3,1,0,7,0,7,
 	0,2,0,0,7,0, 0,0,2,3,1,6, 3,0,1,7,4,3, 3,0,0,6,1,1,
@@ -91,11 +93,11 @@ static PROGMEM prog_char font_35_az[] = {
 	3,0,3,1,5,6, 2,2,3,3,5,1
 };
 
-static boolean inverted_big_font = false;
+//static boolean inverted_big_font = false;
 
 static void read_big_char_code(char ch, uint8_t *buf)
 {
-	prog_char *from;
+	const char *from;
 	uint8_t i;
 	if ( (ch >= '0') && (ch <= '9')) {
 		ch = ch - '0';
@@ -129,31 +131,33 @@ static void read_big_char_code(char ch, uint8_t *buf)
 	}
 }
 
-static void render_big_char_half(uint8_t *dat, LiquidCrystal *output_lcd)
+static void render_big_char_half(uint8_t *dat, LiquidCrystal *lcd, bool invert)
 {
-	if (!inverted_big_font) {
+	if (!invert) {
 		for (uint8_t i=0; i<3; i++){
-			output_lcd->write(dat[i]);
+			lcd->write(dat[i]);
 		}
-		output_lcd->write(' ');
+		lcd->write(' ');
 	}else{
 		for (uint8_t i=0; i<3; i++){
-			output_lcd->write(7 - dat[i]);
+			lcd->write(7 - dat[i]);
 		}
-		output_lcd->write(255);
+		lcd->write(255);
 	}
 }
 
-void render_big_char(char ch, byte loc_x, byte loc_y, LiquidCrystal *output_lcd)
+void BigFont::render_big_char(char ch, byte loc_x, byte loc_y)
 {
 	uint8_t dat[6];
+	LiquidCrystal *lcd = this->_lcd;
+	bool invert = this->_invert;
 	read_big_char_code(ch, dat);
 	
-	output_lcd->setCursor(loc_x,loc_y);
-	render_big_char_half( &dat[0], output_lcd );
+	lcd->setCursor(loc_x, loc_y);
+	render_big_char_half( &dat[0], lcd, invert);
 	
-	output_lcd->setCursor(loc_x,loc_y+1);
-	render_big_char_half( &dat[3], output_lcd );
+	lcd->setCursor(loc_x, loc_y + 1);
+	render_big_char_half( &dat[3], lcd, invert);
 }
 
 // void render_big_msg(char msg[], byte loc_x, byte loc_y)
@@ -182,31 +186,36 @@ void render_big_char(char ch, byte loc_x, byte loc_y, LiquidCrystal *output_lcd)
 //   render_big_msg(msg_buffer, loc_x, loc_y);
 // }
 
-void lcd_clear(LiquidCrystal *output_lcd)
+void BigFont::lcd_clear()
 {
-  if (!inverted_big_font) output_lcd->clear();
+  LiquidCrystal *lcd = this->_lcd;
+  if (!this->_invert)
+  {
+  	lcd->clear();
+  }
   else
   {
-    output_lcd->setCursor(0,0);
+    lcd->setCursor(0,0);
     for (byte i=0;i<80;i++)
     {
-      output_lcd->write(255);
+      lcd->write(255);
     }
   }
 }
 
-void invert_big_font(boolean inv)
-{
-  inverted_big_font = inv;
-}
+// void invert_big_font(boolean inv)
+// {
+//   inverted_big_font = inv;
+// }
 
-void init_big_font(LiquidCrystal *output_lcd)
+void BigFont::init_big_font()
 {
+  LiquidCrystal *lcd = this->_lcd;
   byte ch_buffer[10]; // This buffer is required for custom characters on the LCD.
   for (int i=0;i<8;i++)
   {
     strcpy_P((char*)ch_buffer,(char*)pgm_read_word(&(pbf_ch_item[i])));
-    output_lcd->createChar(i, ch_buffer);
+    lcd->createChar(i, ch_buffer);
   }
 }
 

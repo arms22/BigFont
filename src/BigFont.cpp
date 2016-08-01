@@ -1,18 +1,16 @@
 /*
-  BigFont.cpp - Big Font LCD library for Arduino
-  Copyright 2011(c) arms22. All right reserved.
+  BigFont.cpp - A library that displays large characters on the LCD.
+  Copyright 2011,2016(c) arms22. All right reserved.
   
-  This library is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+  License: Refer to the phi_big_font.h/cpp file.
 */
 
 #include "BigFont.h"
-#include "utility/phi_big_font.h"
 
 BigFont::BigFont()
 {
 	_cur_col = _cur_row = 0;
+	_invert = false;
 }
 
 BigFont::~BigFont()
@@ -22,13 +20,13 @@ BigFont::~BigFont()
 void BigFont::attach(LiquidCrystal *lcd)
 {
     _lcd = lcd;
-	init_big_font(lcd);
-	invert_big_font(false);
+	_invert = false;
+	init_big_font();
 }
 
 void BigFont::clear()
 {
-	lcd_clear(_lcd);
+	lcd_clear();
 	home();
 }
 
@@ -39,7 +37,7 @@ void BigFont::home()
 
 void BigFont::setInvert(bool yes)
 {
-	invert_big_font(yes);
+	_invert = yes;
 }
 
 void BigFont::setCursor(uint8_t col, uint8_t row)
@@ -50,7 +48,7 @@ void BigFont::setCursor(uint8_t col, uint8_t row)
 
 size_t BigFont::write(uint8_t ch)
 {
-	render_big_char(ch, _cur_col, _cur_row, _lcd);
+	render_big_char(ch, _cur_col, _cur_row);
 	_cur_col += 4;
     return 1;
 }

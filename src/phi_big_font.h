@@ -14,15 +14,17 @@
   http://liudr.wordpress.com/phi-2-shield/
   http://liudr.wordpress.com/phi_big_font/
   All rights reserved.
-*/
-#include <Arduino.h>
-#include <LiquidCrystal.h>
 
-void invert_big_font(boolean inv);
-void lcd_clear(LiquidCrystal *output_lcd);
+  modified by arms22.
+  Revision: 08/01/2016
+*/
+#include "BigFont.h"
+
+//void invert_big_font(boolean inv);
+// void lcd_clear(LiquidCrystal *output_lcd);
 //void big_msg_lcd(char* msg_line, byte loc_x, byte loc_y);
 //void render_big_number(int number, byte loc_x, byte loc_y);
 //void render_big_msg(char msg[], byte loc_x, byte loc_y);
-void render_big_char(char ch, byte loc_x, byte loc_y, LiquidCrystal *output_lcd);
-void init_big_font(LiquidCrystal *output_lcd);
+// void render_big_char(char ch, byte loc_x, byte loc_y, LiquidCrystal *output_lcd);
+// void init_big_font(LiquidCrystal *output_lcd);
 //void display_img(byte msg[]);
