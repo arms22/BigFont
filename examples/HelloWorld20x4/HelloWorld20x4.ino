@@ -4,6 +4,9 @@
 // キャラクタLCDクラス（RS=>7, E=>6, D4=>5, D5=>4, D4=>3, D3=>2)
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
 
+//LCDシールドキット
+//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
 // ビッグフォントクラス
 BigFont bigf;
 

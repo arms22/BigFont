@@ -119,6 +119,12 @@ static void read_big_char_code(char ch, uint8_t *buf)
 		ch = ch - '0';
 		from = font_35_09;
 	}
+    else if ( (ch == ' ') ) {
+		for (i=0; i<6; i++){
+			buf[i] = 0;
+		}
+		return;
+    }
     else if ( (ch == '.') ) {
 		ch = ch - '.';
 		from = font_35_dot;

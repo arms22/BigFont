@@ -2,6 +2,10 @@
 #include <BigFont.h>
 
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
+
+//LCDシールドキット
+//LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
 BigFont bigf;
 
 void setup() {
@@ -22,4 +26,3 @@ void loop()
     }
   }
 }
-
